@@ -56,7 +56,8 @@ if [[ ${STATUS} != 0 ]]; then
 fi
 
 SHA512=$(grep -A1 SHA512 "${OUTDIR}/${STAGE3_REAL_NAME}.DIGESTS.asc" | grep stage3 | grep -v CONTENTS | awk '{ print $1 }')
-SHA512_REAL=$(sha512sum "${OUTDIR}/${STAGE3_NAME}" | awk '{ print $1 }')
+SHA512_REAL=
+[ -e "${OUTDIR}/${STAGE3_NAME}" ] && SHA512_REAL=$(sha512sum "${OUTDIR}/${STAGE3_NAME}" | awk '{ print $1 }')
 if [[ "${SHA512}" != "${SHA512_REAL}" ]]; then
   echo "Downloading new image - ${STAGE3_REAL_NAME}"
   curl -s "${STAGE3_URL}" -o "${OUTDIR}/${STAGE3_REAL_NAME}"
@@ -79,7 +80,8 @@ fi
 
 # get the latest portage
 PORTAGE_LIVE_MD5=$(curl -s "${MIRROR}/snapshots/portage-latest.tar.bz2.md5sum" | awk '/portage-latest/ {print $1}')
-OUR_MD5=$(md5sum "${PORTAGE_DIR}/portage-latest.tar.bz2" | awk {'print $1'})
+OUR_MD5=
+[ -e "${PORTAGE_DIR}/portage-latest.tar.bz2" ] && OUR_MD5=$(md5sum "${PORTAGE_DIR}/portage-latest.tar.bz2" | awk {'print $1'})
 if [[ "${PORTAGE_LIVE_MD5}" != "${OUR_MD5}" ]]; then
   echo 'downloading new portage tarball'
   if [[ ! -d "${PORTAGE_DIR}" ]]; then
