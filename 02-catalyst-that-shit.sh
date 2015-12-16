@@ -12,7 +12,9 @@ set -e -u -x -o pipefail
 
 # Vars
 export DATE=${DATE:-"$(date +%Y%m%d)"}
-export OUTDIR=${OUTDIR:-"/root/tmp/catalyst/gentoo"}
+export WORKDIR=${WORKDIR:-"/root/tmp/catalyst"}
+export CATALYST=${CATALYST:-catalyst}
+export OUTDIR=${OUTDIR:-"${WORKDIR}/gentoo"}
 export GIT_BASE_DIR=${GIT_BASE_DIR:-$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )}
 # profiles supported are as follows
 # default/linux/amd64/13.0
@@ -45,7 +47,7 @@ else
   exit 1
 fi
 export OUTFILE=${OUTFILE:-"${OUTDIR}/stage4-${PROFILE_SHORTNAME}-${DATE}.tar.bz2"}
-export SPECFILE=${SPECFILE:-"/root/tmp/catalyst/stage4-${PROFILE_SHORTNAME}.spec"}
+export SPECFILE=${SPECFILE:-"${WORKDIR}/stage4-${PROFILE_SHORTNAME}.spec"}
 mkdir -p "${OUTDIR}"
 
 # Build the spec file, first
@@ -80,7 +82,7 @@ boot/kernel/gentoo/gk_kernargs: --all-ramdisk-modules
 EOF
 
 # Run catalyst
-catalyst -f "${SPECFILE}"
+$CATALYST -f "${SPECFILE}"
 
 # Clean up the spec file
 rm "${SPECFILE}"

@@ -7,7 +7,8 @@
 set -e -u -x -o pipefail
 
 # Vars
-export TEMP_DIR=${TEMP_DIR:-'/root/tmp/catalyst/gentoo'}
+export WORKDIR=${WORKDIR:-"/root/tmp/catalyst"}
+export TEMP_DIR=${TEMP_DIR:-"${WORKDIR}/gentoo"}
 export MOUNT_DIR=${MOUNT_DIR:-'/mnt'}
 export DATE=${DATE:-"$(date +%Y%m%d)"}
 export PORTAGE_DIR=${PORTAGE_DIR:-"/var/tmp/catalyst/snapshots"}
@@ -31,7 +32,7 @@ else
   echo 'invalid profile, exiting'
   exit 1
 fi
-export TARBALL=${TARBALL:-"/root/tmp/catalyst/gentoo/stage4-${PROFILE_SHORTNAME}-${DATE}.tar.bz2"}
+export TARBALL=${TARBALL:-"${WORKDIR}/gentoo/stage4-${PROFILE_SHORTNAME}-${DATE}.tar.bz2"}
 export TEMP_IMAGE=${TEMP_IMAGE:-"gentoo-${PROFILE_SHORTNAME}.img"}
 export TARGET_IMAGE=${TARGET_IMAGE:-"/root/openstack-${PROFILE_SHORTNAME}-${DATE}.qcow2"}
 
